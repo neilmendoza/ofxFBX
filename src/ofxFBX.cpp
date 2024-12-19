@@ -212,6 +212,32 @@ void ofxFBX::setup( ofxFBXSource::Scene* aScene ) {
     
 }
 
+void ofxFBX::logMeshBlendshapes() {
+    for (auto& mesh : meshes) {
+        FbxMesh* fbxMesh = mesh->getSourceMesh()->getFbxMesh();
+        int blendShapeCount = fbxMesh->GetDeformerCount(FbxDeformer::eBlendShape);
+        if (blendShapeCount > 0) {
+            cout << "Mesh: " << mesh->getName() << endl;
+            for (int deformerIndex = 0; deformerIndex < blendShapeCount; ++deformerIndex) {
+                FbxBlendShape* blendShape = (FbxBlendShape*)fbxMesh->GetDeformer(deformerIndex, FbxDeformer::eBlendShape);
+                int channelCount = blendShape->GetBlendShapeChannelCount();
+                for (int channelIndex = 0; channelIndex < channelCount; ++channelIndex) {
+                    FbxBlendShapeChannel* channel = blendShape->GetBlendShapeChannel(channelIndex);
+                    int targetShapeCount = channel->GetTargetShapeCount();
+                    for (int shapeIndex = 0; shapeIndex < targetShapeCount; ++shapeIndex) {
+                        FbxShape* shape = channel->GetTargetShape(shapeIndex);
+                        const char* shapeName = shape->GetName();
+                        cout << "  BlendShape: " << blendShape->GetName()
+                                      << ", Channel: " << channelIndex
+                                      << ", Shape: " << shapeName << endl;
+                    }
+                }
+            }
+        }
+        else cout << "Mesh: " << mesh->getName() << " has no blendshapes" << endl;
+    }
+}
+
 //--------------------------------------------------------------
 void ofxFBX::_parseSceneNodesRecursive( shared_ptr<ofxFBXSource::Node> anode, shared_ptr<ofxFBXNode> aParentNode ) {
     if( !anode ) return;

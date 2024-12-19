@@ -11,6 +11,10 @@
 */*.xcodeproj/project.xcworkspace
 */build/*
 .DS_Store
+.idea
+.qbs
+*/Makefile
+*/*.qbs
 
 
 # User-specific files

@@ -197,6 +197,8 @@ public:
     // Flattens out scene hierarchy //
     vector< shared_ptr<ofxFBXNode> > getAllNodes();
     vector< shared_ptr<ofxFBXNode> > getRootNodes();
+
+    void logMeshBlendshapes();
     
     
 protected:
